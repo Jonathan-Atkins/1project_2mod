@@ -1,5 +1,20 @@
 // query selector variables go here 👇
-
+let posterImage      = document.querySelector('.poster-img');
+let posterTitle      = document.querySelector('.poster-title');
+let posterQuote      = document.querySelector('.poster-quote');
+let showRandomButton = document.querySelector('.show-random');
+let showForm         = document.querySelector('.show-form');
+let mainPoster       = document.querySelector('.main-poster');
+let posterForm       = document.querySelector('.poster-form');
+let showSavedButton  = document.querySelector('.show-saved');
+let savedPosters     = document.querySelector('.saved-posters');
+let savePosterButton = document.querySelector('.save-poster');
+let showMainButton   = document.querySelector('.show-main');
+let backToMainButton = document.querySelector('.back-to-main');
+let makePosterButton = document.querySelector('.make-poster');
+let posterImageUrl   = document.querySelector('#poster-image-url');
+let posterTitleInput = document.querySelector('#poster-title');
+let posterQuoteInput = document.querySelector('#poster-quote');
 // we've provided you with some data to work with 👇
 // tip: you can tuck this data out of view with the dropdown found near the line number where the variable is declared 
 var images = [
@@ -99,21 +114,110 @@ var quotes = [
   "Each person must live their life as a model for others.",
   "A champion is defined not by their wins but by how they can recover when they fall."
 ];
-var savedPosters = [];
+var savedPostersArray = [];
 var currentPoster;
 
 // event listeners go here 👇
-
+window.addEventListener("load", changeImg);
+showRandomButton.addEventListener("click", changeImg);
+showForm.addEventListener("click", makeForm);
+showSavedButton.addEventListener("click", saveYourPosters);
+showMainButton.addEventListener("click", showMainScreen);
+backToMainButton.addEventListener("click", showMainScreen);
+makePosterButton.addEventListener("click", displayCustomPoster);
+savePosterButton.addEventListener("click", savePoster);
 // functions and event handlers go here 👇
-// (we've provided two to get you started)!
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
 }
 
 function createPoster(imageURL, title, quote) {
   return {
-    id: Date.now(), 
-    imageURL: imageURL, 
-    title: title, 
-    quote: quote}
+    id: Date.now(),
+    imageURL: imageURL,
+    title: title,
+    quote: quote
+  };
 }
+
+function changeImg() {
+  let randomImg         = images[getRandomIndex(images)];
+  let randomQuote       = quotes[getRandomIndex(quotes)];
+  let randomTitle       = titles[getRandomIndex(titles)];
+
+  let randomPoster      = createPoster(randomImg, randomTitle, randomQuote);
+
+  posterImage.src       = randomPoster.imageURL;
+  posterTitle.innerText = randomPoster.title;
+  posterQuote.innerText = randomPoster.quote;
+
+  currentPoster = randomPoster;  // Update the current poster to be the random one displayed
+}
+
+function makeForm() {
+  mainPoster.classList.add("hidden");
+  posterForm.classList.remove("hidden");
+}
+
+function saveYourPosters() {
+  mainPoster.classList.add("hidden");
+  savedPosters.classList.remove("hidden");
+  // When a user clicks the “Show Saved Posters” button, we should see the saved posters section
+  savedPostersArray.forEach(poster => {
+    let savedPosterElement = document.createElement("div");
+    savedPosterElement.classList.add("saved-poster");
+
+    let savedPosterImage = document.createElement("img");
+    savedPosterImage.src = poster.imageURL;
+    savedPosterImage.alt = poster.title;
+
+    let savedPosterTitle = document.createElement("h3");
+    savedPosterTitle.innerText = poster.title;
+
+    let savedPosterQuote = document.createElement("p");
+    savedPosterQuote.innerText = poster.quote;
+
+    savedPosterElement.appendChild(savedPosterImage);
+    savedPosterElement.appendChild(savedPosterTitle);
+    savedPosterElement.appendChild(savedPosterQuote);
+
+    savedPostersContainer.appendChild(savedPosterElement);
+  }
+}
+function showMainScreen() {
+  posterForm.classList.add("hidden");
+  savedPosters.classList.add("hidden");
+  mainPoster.classList.remove("hidden");
+}
+
+function displayCustomPoster() {
+  event.preventDefault();
+
+  let customImg         = posterImageUrl.value;
+  let customTitle       = posterTitleInput.value;
+  let customQuote       = posterQuoteInput.value;
+
+  let customPoster      = createPoster(customImg, customTitle, customQuote);
+
+  posterImage.src       = customPoster.imageURL;
+  posterImage.alt       = customPoster.title;
+  posterTitle.innerText = customPoster.title;
+  posterQuote.innerText = customPoster.quote;
+
+  currentPoster        = customPoster; // Set current poster to the custom one
+
+  posterForm.classList.add("hidden");
+  mainPoster.classList.remove("hidden");
+
+}
+function savePoster() {
+  if (savedPostersArray.some(poster => poster.imageURL === currentPoster.imageURL)) {
+    return;  // Do not save duplicate posters
+  } else {
+    savedPostersArray.push(currentPoster); 
+  }
+}
+
+
+//We need to access the Show Saved Poster Button
+
