@@ -15,6 +15,9 @@ let makePosterButton = document.querySelector('.make-poster');
 let posterImageUrl   = document.querySelector('#poster-image-url');
 let posterTitleInput = document.querySelector('#poster-title');
 let posterQuoteInput = document.querySelector('#poster-quote');
+let savedPostersGrid = document.querySelector('.saved-posters-grid');
+let showUnmotivatedPosterButton = document.querySelector('.show-unmotivational');
+let unmotivationalPoster = document.querySelector('.unmotivational-poster')
 // we've provided you with some data to work with 👇
 // tip: you can tuck this data out of view with the dropdown found near the line number where the variable is declared 
 var images = [
@@ -114,6 +117,129 @@ var quotes = [
   "Each person must live their life as a model for others.",
   "A champion is defined not by their wins but by how they can recover when they fall."
 ];
+
+let unmotivationalPosters = [
+  {
+    name: "FAILURE",
+    description: "Why bother trying? It's probably not worth it.",
+    price: 68.00,
+    year: 2019,
+    vintage: true,
+    img_url: "./assets/failure.jpg",
+  },
+  {
+    name: "MEDIOCRITY",
+    description: "Dreams are just that—dreams.",
+    price: 127.00,
+    year: 2021,
+    vintage: false,
+    img_url: "./assets/mediocrity.jpg",
+  },
+  {
+    name: "REGRET",
+    description: "Hard work rarely pays off.",
+    price: 89.00,
+    year: 2018,
+    vintage: true,
+    img_url:  "./assets/regret.jpg",
+  },
+  {
+    name: "FUTILITY",
+    description: "You're not good enough.",
+    price: 150.00,
+    year: 2016,
+    vintage: false,
+    img_url:  "./assets/futility.jpg",
+  },
+  {
+    name: "DEFEAT",
+    description: "It's too late to start now.",
+    price: 35.00,
+    year: 2023,
+    vintage: false,
+    img_url:  "./assets/defeat.jpg",
+  },
+  {
+    name: "HOPELESSNESS",
+    description: "Stay in your comfort zone; it's safer.",
+    price: 112.00,
+    year: 2020,
+    vintage: true,
+    img_url: "./assets/hopelessness.jpg",
+  },
+  {
+    name: "LAZINESS",
+    description: "You can't change anything.",
+    price: 25.00,
+    year: 2022,
+    vintage: false,
+    img_url: "./assets/laziness.jpg",
+  },
+  {
+    name: "PROCRASTINATION",
+    description: "Better to avoid failure by not trying at all.",
+    price: 48.00,
+    year: 2017,
+    vintage: true,
+    img_url: "./assets/procrastination.jpg",
+  },
+  {
+    name: "DESPAIR",
+    description: "Let someone else do it; you’ll just mess it up.",
+    price: 73.00,
+    year: 2015,
+    vintage: false,
+    img_url: "./assets/despair.jpg",
+  },
+  {
+    name: "NEGLECT",
+    description: "Happiness is overrated.",
+    price: 160.00,
+    year: 2019,
+    vintage: true,
+    img_url: "./assets/neglect.jpg",
+  },
+  {
+    name: "FEAR",
+    description: "Giving up is always an option.",
+    price: 91.00,
+    year: 2014,
+    vintage: false,
+    img_url: "./assets/fear.jpg",
+  },
+  {
+    name: "APATHY",
+    description: "No one cares about your effort.",
+    price: 110.00,
+    year: 2016,
+    vintage: true,
+    img_url: "./assets/apathy.jpg",
+  },
+  {
+    name: "MISERY",
+    description: "Why take risks when you can stay stagnant?",
+    price: 55.00,
+    year: 2021,
+    vintage: false,
+    img_url: "./assets/misery.jpg",
+  },
+  {
+    name: "BLAME",
+    description: "Expect disappointment and you'll never be disappointed.",
+    price: 39.00,
+    year: 2017,
+    vintage: true,
+    img_url: "./assets/blame.jpg",
+  },
+  {
+    name: "DOUBT",
+    description: "Success is for other people, not you.",
+    price: 140.00,
+    year: 2020,
+    vintage: false,
+    img_url: "./assets/doubt.jpg",
+  }
+];
 var savedPostersArray = [];
 var currentPoster;
 
@@ -121,15 +247,16 @@ var currentPoster;
 window.addEventListener("load", changeImg);
 showRandomButton.addEventListener("click", changeImg);
 showForm.addEventListener("click", makeForm);
-showSavedButton.addEventListener("click", saveYourPosters);
+showSavedButton.addEventListener("click", showSavedPosters);
 showMainButton.addEventListener("click", showMainScreen);
 backToMainButton.addEventListener("click", showMainScreen);
 makePosterButton.addEventListener("click", displayCustomPoster);
 savePosterButton.addEventListener("click", savePoster);
+showUnmotivatedPosterButton.addEventListener("click", showUnmotivatedPosters)
 // functions and event handlers go here 👇
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
-}
+} 
 
 function createPoster(imageURL, title, quote) {
   return {
@@ -159,31 +286,30 @@ function makeForm() {
   posterForm.classList.remove("hidden");
 }
 
-function saveYourPosters() {
-  mainPoster.classList.add("hidden");
-  savedPosters.classList.remove("hidden");
-  // When a user clicks the “Show Saved Posters” button, we should see the saved posters section
+function showSavedPosters() {
+  mainPoster.classList.add("hidden"); // Hide the main poster section
+  savedPosters.classList.remove("hidden"); // Show the saved posters section
+  
+  savedPostersGrid.innerHTML = "";
+
+  // savedPostersArray.forEach(poster => {
+  //   let savedPosterArticle = createPoster(poster); 
+
+  //   savedPostersGrid.appendChild(savedPosterArticle)
   savedPostersArray.forEach(poster => {
-    let savedPosterElement = document.createElement("div");
-    savedPosterElement.classList.add("saved-poster");
-
-    let savedPosterImage = document.createElement("img");
-    savedPosterImage.src = poster.imageURL;
-    savedPosterImage.alt = poster.title;
-
-    let savedPosterTitle = document.createElement("h3");
-    savedPosterTitle.innerText = poster.title;
-
-    let savedPosterQuote = document.createElement("p");
-    savedPosterQuote.innerText = poster.quote;
-
-    savedPosterElement.appendChild(savedPosterImage);
-    savedPosterElement.appendChild(savedPosterTitle);
-    savedPosterElement.appendChild(savedPosterQuote);
-
-    savedPostersContainer.appendChild(savedPosterElement);
-  }
+    let savedPosterArticle = document.createElement('article'); // Create a new article element
+    
+    savedPosterArticle.classList.add("mini-poster"); // Assign a class for styling
+    
+    savedPosterArticle.innerHTML = `
+      <img src="${poster.imageURL}" class="poster-img" alt="${poster.title}">
+      <h1 class="poster-title">${poster.title}</h1>
+      <h3 class="poster-quote">${poster.quote}</h3>
+    `;
+    savedPostersGrid.appendChild(savedPosterArticle)
+  });
 }
+
 function showMainScreen() {
   posterForm.classList.add("hidden");
   savedPosters.classList.add("hidden");
@@ -218,6 +344,18 @@ function savePoster() {
   }
 }
 
+function showUnmotivatedPosters() {
+  // posterForm.classList.add("hidden");
+  // savedPosters.classList.add("hidden");
+  mainPoster.classList.add("hidden");
+  
+
+  console.log('did we make it');
+  console.log(savedPosters,"saved Posters");
+  console.log(mainPoster, "Main Poster");
+  console.log(unmotivationalPosters, "Unmotivational Posters");
+  // unmotivationalPoster.classList.remove("hidden");
+}
 
 //We need to access the Show Saved Poster Button
 
