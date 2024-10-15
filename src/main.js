@@ -1,23 +1,25 @@
 // query selector variables go here 👇
-let posterImage      = document.querySelector('.poster-img');
-let posterTitle      = document.querySelector('.poster-title');
-let posterQuote      = document.querySelector('.poster-quote');
-let showRandomButton = document.querySelector('.show-random');
-let showForm         = document.querySelector('.show-form');
-let mainPoster       = document.querySelector('.main-poster');
-let posterForm       = document.querySelector('.poster-form');
-let showSavedButton  = document.querySelector('.show-saved');
-let savedPosters     = document.querySelector('.saved-posters');
-let savePosterButton = document.querySelector('.save-poster');
-let showMainButton   = document.querySelector('.show-main');
-let backToMainButton = document.querySelector('.back-to-main');
-let makePosterButton = document.querySelector('.make-poster');
-let posterImageUrl   = document.querySelector('#poster-image-url');
-let posterTitleInput = document.querySelector('#poster-title');
-let posterQuoteInput = document.querySelector('#poster-quote');
-let savedPostersGrid = document.querySelector('.saved-posters-grid');
+let posterImage                 = document.querySelector('.poster-img');
+let posterTitle                 = document.querySelector('.poster-title');
+let posterQuote                 = document.querySelector('.poster-quote');
+let showRandomButton            = document.querySelector('.show-random');
+let showForm                    = document.querySelector('.show-form');
+let mainPoster                  = document.querySelector('.main-poster');
+let posterForm                  = document.querySelector('.poster-form');
+let showSavedButton             = document.querySelector('.show-saved');
+let savedPosters                = document.querySelector('.saved-posters');
+let savePosterButton            = document.querySelector('.save-poster');
+let showMainButton              = document.querySelector('.show-main');
+let backToMainButton            = document.querySelector('.back-to-main');
+let makePosterButton            = document.querySelector('.make-poster');
+let posterImageUrl              = document.querySelector('#poster-image-url');
+let posterTitleInput            = document.querySelector('#poster-title');
+let posterQuoteInput            = document.querySelector('#poster-quote');
+let savedPostersGrid            = document.querySelector('.saved-posters-grid');
 let showUnmotivatedPosterButton = document.querySelector('.show-unmotivational');
-let unmotivationalPoster = document.querySelector('.unmotivational-poster')
+let unmotivationalPosters       = document.querySelector('.unmotivational-posters');
+let backToMainButtonUnmotivated = document.querySelector('.unmotivational-posters .back-to-main');
+let unmotivationalPostersGrid   = document.querySelector('.unmotivational-posters-grid')
 // we've provided you with some data to work with 👇
 // tip: you can tuck this data out of view with the dropdown found near the line number where the variable is declared 
 var images = [
@@ -118,7 +120,7 @@ var quotes = [
   "A champion is defined not by their wins but by how they can recover when they fall."
 ];
 
-let unmotivationalPosters = [
+let unmotivationalPostersArray = [
   {
     name: "FAILURE",
     description: "Why bother trying? It's probably not worth it.",
@@ -253,6 +255,9 @@ backToMainButton.addEventListener("click", showMainScreen);
 makePosterButton.addEventListener("click", displayCustomPoster);
 savePosterButton.addEventListener("click", savePoster);
 showUnmotivatedPosterButton.addEventListener("click", showUnmotivatedPosters)
+backToMainButtonUnmotivated.addEventListener("click", function(){
+  showMainPage(unmotivationalPosters);
+})
 // functions and event handlers go here 👇
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
@@ -292,10 +297,6 @@ function showSavedPosters() {
   
   savedPostersGrid.innerHTML = "";
 
-  // savedPostersArray.forEach(poster => {
-  //   let savedPosterArticle = createPoster(poster); 
-
-  //   savedPostersGrid.appendChild(savedPosterArticle)
   savedPostersArray.forEach(poster => {
     let savedPosterArticle = document.createElement('article'); // Create a new article element
     
@@ -308,6 +309,12 @@ function showSavedPosters() {
     `;
     savedPostersGrid.appendChild(savedPosterArticle)
   });
+}
+
+
+function showMainPage(page) {
+  page.classList.add("hidden");
+  mainPoster.classList.remove("hidden")
 }
 
 function showMainScreen() {
@@ -344,18 +351,40 @@ function savePoster() {
   }
 }
 
-function showUnmotivatedPosters() {
-  // posterForm.classList.add("hidden");
-  // savedPosters.classList.add("hidden");
-  mainPoster.classList.add("hidden");
-  
-
-  console.log('did we make it');
-  console.log(savedPosters,"saved Posters");
-  console.log(mainPoster, "Main Poster");
-  console.log(unmotivationalPosters, "Unmotivational Posters");
-  // unmotivationalPoster.classList.remove("hidden");
+function cleanData() {
+  return unmotivationalPostersArray.map(poster => {
+    return createPoster(poster.img_url, poster.name, poster.description)    
+  })
 }
 
-//We need to access the Show Saved Poster Button
+function showUnmotivatedPosters() {
+  mainPoster.classList.add("hidden");
+  unmotivationalPosters.classList.remove("hidden");  
+
+  cleanData().forEach(poster => {
+    let unmotivationalArticle = document.createElement('article'); // Create a new article element
+    
+    unmotivationalArticle.classList.add("mini-poster"); // Assign a class for styling
+    
+    unmotivationalArticle.innerHTML = `
+      <img src="${poster.imageURL}" class="poster-img" alt="${poster.title}">
+      <h1 class="poster-title">${poster.title}</h1>
+      <h3 class="poster-quote">${poster.quote}</h3>
+    `;
+    unmotivationalPostersGrid.appendChild(unmotivationalArticle)
+  }); 
+}
+
+function hideCurrentSection() {
+  // Get the current page path
+  var currentPath = window.location.pathname;
+
+  // Find the section corresponding to the current path
+  var sectionToHide = document.querySelector(`section[data-page="${currentPath}"]`);
+
+  // If a matching section is found, add the hidden attribute
+  if (sectionToHide) {
+    sectionToHide.setAttribute('hidden', true);
+  }
+}
 
