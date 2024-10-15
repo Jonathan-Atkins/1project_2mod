@@ -254,10 +254,13 @@ showMainButton.addEventListener("click", showMainScreen);
 backToMainButton.addEventListener("click", showMainScreen);
 makePosterButton.addEventListener("click", displayCustomPoster);
 savePosterButton.addEventListener("click", savePoster);
+// showUnmotivatedPosterButton.addEventListener("click", showUnmotivatedPosters(cleanData()))
 showUnmotivatedPosterButton.addEventListener("click", showUnmotivatedPosters)
 backToMainButtonUnmotivated.addEventListener("click", function(){
   showMainPage(unmotivationalPosters);
 })
+doubleCickDelete.addEventListener("dblclick", deletePoster);
+
 // functions and event handlers go here 👇
 function getRandomIndex(array) {
   return Math.floor(Math.random() * array.length);
@@ -349,6 +352,7 @@ function savePoster() {
   } else {
     savedPostersArray.push(currentPoster); 
   }
+  alert("Saved!")
 }
 
 function cleanData() {
@@ -357,11 +361,16 @@ function cleanData() {
   })
 }
 
-function showUnmotivatedPosters() {
-  mainPoster.classList.add("hidden");
-  unmotivationalPosters.classList.remove("hidden");  
+// function showUnmotivatedPosters(data) {
+//   mainPoster.classList.add("hidden");
+//   unmotivationalPosters.classList.remove("hidden");  
 
-  cleanData().forEach(poster => {
+//   data.forEach(poster => {
+  function showUnmotivatedPosters() {
+      mainPoster.classList.add("hidden");
+      unmotivationalPosters.classList.remove("hidden");  
+    
+      cleanData().forEach(poster => {
     let unmotivationalArticle = document.createElement('article'); // Create a new article element
     
     unmotivationalArticle.classList.add("mini-poster"); // Assign a class for styling
@@ -388,3 +397,9 @@ function hideCurrentSection() {
   }
 }
 
+function deletePoster(posterId){
+  let remainingPosters = cleanData().filter(poster => {
+    poster.id !== posterId  
+  })    
+  showUnmotivatedPosters(remainingPosters)
+}

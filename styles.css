@@ -12,6 +12,7 @@ body {
   background: ghostwhite;
 }
 
+/*------------- button -------------------- */
 button,
 input {
   font-size: 20px;
@@ -32,6 +33,9 @@ button:hover {
 button.show-unmotivational:hover {
   background: rgb(255, 0, 89);
 }
+
+
+/*----------- show/hide ------------------- */
 
 .hidden {
   display: none!important;
@@ -63,11 +67,11 @@ button.show-unmotivational:hover {
   color: white;
   line-height: 1;
   width: 90%;
-  font-size: 24px;
+  font-size: 30px;
 }
 
 .poster-title {
-  font-size: 60px;
+  font-size: 37px;
   font-weight: normal;
   letter-spacing: 20px;
   margin-bottom: 10px;
@@ -148,6 +152,16 @@ button.show-unmotivational:hover {
   letter-spacing: 5px;
   margin-bottom: 10px;
   text-transform: uppercase;
+}
+
+.mini-poster h1 {
+  font-size: 23px;
+  text-align: center;
+  letter-spacing: 13px;
+}
+
+.mini-poster h3{
+  font-size: 16px;
 }
 
 .unmotivational-posters {
