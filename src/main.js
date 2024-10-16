@@ -20,6 +20,7 @@ let showUnmotivatedPosterButton = document.querySelector('.show-unmotivational')
 let unmotivationalPosters       = document.querySelector('.unmotivational-posters');
 let backToMainButtonUnmotivated = document.querySelector('.unmotivational-posters .back-to-main');
 let unmotivationalPostersGrid   = document.querySelector('.unmotivational-posters-grid')
+let allImages                   = document.querySelectorAll('.unmotivational-posters-grid img')
 // we've provided you with some data to work with 👇
 // tip: you can tuck this data out of view with the dropdown found near the line number where the variable is declared 
 var images = [
@@ -255,11 +256,16 @@ backToMainButton.addEventListener("click", showMainScreen);
 makePosterButton.addEventListener("click", displayCustomPoster);
 savePosterButton.addEventListener("click", savePoster);
 // showUnmotivatedPosterButton.addEventListener("click", showUnmotivatedPosters(cleanData()))
-showUnmotivatedPosterButton.addEventListener("click", showUnmotivatedPosters)
+showUnmotivatedPosterButton.addEventListener("click", function(){ 
+  hideMainPage(unmotivationalPosters)
+  showUnmotivatedPosters(unmotivationalPostersArray)
+})
+
 backToMainButtonUnmotivated.addEventListener("click", function(){
   showMainPage(unmotivationalPosters);
 })
-doubleCickDelete.addEventListener("dblclick", deletePoster);
+// doubleCickDelete.addEventListener("dblclick", deletePoster, "helloworld");
+
 
 // functions and event handlers go here 👇
 function getRandomIndex(array) {
@@ -319,6 +325,10 @@ function showMainPage(page) {
   page.classList.add("hidden");
   mainPoster.classList.remove("hidden")
 }
+function hideMainPage(page) {
+  page.classList.remove("hidden");
+  mainPoster.classList.add("hidden")
+}
 
 function showMainScreen() {
   posterForm.classList.add("hidden");
@@ -355,24 +365,40 @@ function savePoster() {
   alert("Saved!")
 }
 
-function cleanData() {
-  return unmotivationalPostersArray.map(poster => {
+// function cleanData() {
+//   return unmotivationalPostersArray.map(poster => {
+//     return createPoster(poster.img_url, poster.name, poster.description)    
+//   })
+// }
+function cleanData(data) {
+  return data.map(poster => {
     return createPoster(poster.img_url, poster.name, poster.description)    
   })
 }
 
-// function showUnmotivatedPosters(data) {
-//   mainPoster.classList.add("hidden");
-//   unmotivationalPosters.classList.remove("hidden");  
+//   function showUnmotivatedPosters() {
+//       mainPoster.classList.add("hidden");
+//       unmotivationalPosters.classList.remove("hidden");  
+    
+//       cleanData().forEach(poster => {
+//     let unmotivationalArticle = document.createElement('article'); // Create a new article element
+    
+//     unmotivationalArticle.classList.add("mini-poster"); // Assign a class for styling
+    
+//     unmotivationalArticle.innerHTML = `
+//       <img src="${poster.imageURL}" class="poster-img" alt="${poster.title}">
+//       <h1 class="poster-title">${poster.title}</h1>
+//       <h3 class="poster-quote">${poster.quote}</h3>
+//     `;
+//     unmotivationalPostersGrid.appendChild(unmotivationalArticle)
+//   }); 
+// }
+function showUnmotivatedPosters(data) {
+  let cleanUnmotivationalPosters = cleanData(data)
 
-//   data.forEach(poster => {
-  function showUnmotivatedPosters() {
-      mainPoster.classList.add("hidden");
-      unmotivationalPosters.classList.remove("hidden");  
-    
-      cleanData().forEach(poster => {
+  cleanUnmotivationalPosters.forEach(poster => {
     let unmotivationalArticle = document.createElement('article'); // Create a new article element
-    
+  
     unmotivationalArticle.classList.add("mini-poster"); // Assign a class for styling
     
     unmotivationalArticle.innerHTML = `
@@ -397,9 +423,14 @@ function hideCurrentSection() {
   }
 }
 
-function deletePoster(posterId){
-  let remainingPosters = cleanData().filter(poster => {
-    poster.id !== posterId  
-  })    
-  showUnmotivatedPosters(remainingPosters)
+function deletePoster(){
+  allImages.forEach(image => {
+    image.addEventListener("dblclick", (event) =>{
+      event.target.remove
+    })
+  })
+  // let remainingPosters = cleanData().filter(poster => {
+  //   poster.title !== posterTitle  
+  // })    
+  // showUnmotivatedPosters(remainingPosters)
 }
