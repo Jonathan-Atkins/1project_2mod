@@ -365,34 +365,14 @@ function savePoster() {
   alert("Saved!")
 }
 
-// function cleanData() {
-//   return unmotivationalPostersArray.map(poster => {
-//     return createPoster(poster.img_url, poster.name, poster.description)    
-//   })
-// }
+
 function cleanData(data) {
   return data.map(poster => {
     return createPoster(poster.img_url, poster.name, poster.description)    
   })
 }
 
-//   function showUnmotivatedPosters() {
-//       mainPoster.classList.add("hidden");
-//       unmotivationalPosters.classList.remove("hidden");  
-    
-//       cleanData().forEach(poster => {
-//     let unmotivationalArticle = document.createElement('article'); // Create a new article element
-    
-//     unmotivationalArticle.classList.add("mini-poster"); // Assign a class for styling
-    
-//     unmotivationalArticle.innerHTML = `
-//       <img src="${poster.imageURL}" class="poster-img" alt="${poster.title}">
-//       <h1 class="poster-title">${poster.title}</h1>
-//       <h3 class="poster-quote">${poster.quote}</h3>
-//     `;
-//     unmotivationalPostersGrid.appendChild(unmotivationalArticle)
-//   }); 
-// }
+
 function showUnmotivatedPosters(data) {
   let cleanUnmotivationalPosters = cleanData(data)
 
@@ -407,6 +387,7 @@ function showUnmotivatedPosters(data) {
       <h3 class="poster-quote">${poster.quote}</h3>
     `;
     unmotivationalPostersGrid.appendChild(unmotivationalArticle)
+    unmotivationalPostersGrid.addEventListener("dblclick", deletePoster)
   }); 
 }
 
@@ -423,14 +404,14 @@ function hideCurrentSection() {
   }
 }
 
-function deletePoster(){
-  allImages.forEach(image => {
-    image.addEventListener("dblclick", (event) =>{
-      event.target.remove
+function deletePoster(event){
+  let clickedImg = event.target.closest('.unmotivational-posters-grid .mini-poster')
+  if (clickedImg) {
+    let posterId = clickedImg.getAttribute('data-id')
+    clickedImg.remove()
+    remainingPosters = unmotivationalPostersArray.filter(poster =>{
+      return poster.id !== posterId
     })
-  })
-  // let remainingPosters = cleanData().filter(poster => {
-  //   poster.title !== posterTitle  
-  // })    
-  // showUnmotivatedPosters(remainingPosters)
+    showUnmotivatedPosters(remainingPosters)
+  }
 }
